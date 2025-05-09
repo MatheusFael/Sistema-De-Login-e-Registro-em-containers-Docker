@@ -1,5 +1,5 @@
 
-# 📝 Backend Full Course – Node.js, Express.js, Prisma, PostgreSQL & Docker
+# 📝 Backend Project – Node.js, Express.js, Prisma, PostgreSQL & Docker
 
 Este projeto é um Todo App com autenticação, desenvolvido com Node.js, Express.js, Prisma, PostgreSQL e Docker. Aqui você encontrará uma visão geral do sistema, sua estrutura e instruções passo a passo para rodá-lo localmente.
 
