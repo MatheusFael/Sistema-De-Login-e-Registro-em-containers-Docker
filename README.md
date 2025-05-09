@@ -1,43 +1,172 @@
-ACKEND FULL COURSE - Node.JS Express.JS Prisma PostgreSQL & Docker This guide provides an overview of the codebase, the functionality of the app, and detailed instructions on how to set up and run the app. Make sure to follow all steps carefully, especially regarding Node.js version requirements.
 
-Overview This is an Dockerized and authentication-protected Todo App using Node.js, Express.js, bcrypt, JWT authentication, Prisma, and PostgreSQL. The app allows users to:
+# 📝 Backend Full Course – Node.js, Express.js, Prisma, PostgreSQL & Docker
 
-Register: Create a new account. Login: Authenticate and receive a JWT token. Manage Todos: Perform auth protected CRUD operations on their own todo tasks after logging in. Project Structure Here’s the corrected and complete project structure diagram for the auth-protected Todo App:
+Este projeto é um Todo App com autenticação, desenvolvido com Node.js, Express.js, Prisma, PostgreSQL e Docker. Aqui você encontrará uma visão geral do sistema, sua estrutura e instruções passo a passo para rodá-lo localmente.
 
-backend-todo-app/ │ ├── public/ │ └── index.html # The frontend HTML file for authentication and todo management │ ├── prisma/ │ ├── schema.prisma # The frontend HTML file for authentication and todo management │ └── migrations/ # │ ├── src/ │ ├── controllers/ # (Optional) For future separation of concerns │ └── middlewares/ │ └── authMiddleware.js # Middleware for verifying JWT and protecting routes │ └── routes/ │ └── authRoutes.js # Routes for user registration and login │ └── todoRoutes.js # Routes for authenticated CRUD operations on todos │ └── prismaClient.js # Prisma client database setup and table creation │ └── server.js # Main server entry point that sets up routing and middleware │ ├── Dockerfile # Docker container setup instructions ├── docker-compose.yaml # Docker setup config file ├── package.json # Project dependencies and scripts ├── package-lock.json # Lockfile for exact dependency versions └── todo-app.rest # REST client file for emulating API requests Explanation of Key Directories and Files prisma/: Contains Prisma's schema (schema.prisma) and migration files. After each schema change, migration files are generated here to apply database changes. public/: Contains the frontend HTML file. This file interacts with the backend API for user registration, login, and todo management. src/: The core backend code. controllers/ (optional): A directory to organize logic and separate it from the routes if needed in the future. middlewares/: Contains middleware for handling JWT-based authentication, protecting routes that require authentication. routes/: Contains API routes for handling authentication and CRUD operations for todos. prismaClient.js: Sets up the Prisma client for database interaction. server.js: The entry point for the Express.js application, which configures the app, routes, and middleware. .env: Stores environment variables like DATABASE_URL and JWT_SECRET. These variables are used to configure Prisma, JWT, and database connections. Dockerfile: The Dockerfile for building the Node.js application in a containerized environment. docker-compose.yaml: Configuration for Docker Compose, which sets up both the Node.js app and PostgreSQL in separate containers. package.json: Defines the Node.js dependencies and scripts used to run the application (e.g., npm start). README.md: Project documentation, including setup instructions and directory structure (this file). Example Workflow Define or Update Schema: Modify the schema.prisma file to change your database structure. Create Migrations: Use Prisma to generate and apply migrations. Run Docker Compose: Build and run the Node.js app and PostgreSQL using Docker Compose. Interact with the API: Use the frontend or API client (e.g., Postman) to register, login, and manage todos. This project structure and workflow will help organize your code and make it easier to maintain and scale as your application grows.
+---
 
-Getting Started Install Docker Desktop
+## 🚀 Visão Geral
 
-Clone the Repository:
+Este é um **Todo App** dockerizado com autenticação JWT, desenvolvido com:
 
-git clone https://github.com/your-username/backend-todo-app.git cd backend-todo-app Generate the Prisma Client: npx prisma generate
+- **Node.js & Express.js**
+- **Prisma ORM**
+- **PostgreSQL**
+- **JWT & Bcrypt**
+- **Docker & Docker Compose**
 
-Build your docker images: docker compose build
+### Funcionalidades:
 
-Create PostgreSQL migrations and apply them: docker compose run app npx prisma migrate dev --name init
+- ✅ **Registrar:** Criar uma nova conta  
+- 🔐 **Login:** Autenticar e receber um token JWT  
+- 🧾 **Gerenciar Todos:** Realizar operações CRUD autenticadas
 
-Also - to run/apply migrations if necessary:
+---
 
-docker-compose run app npx prisma migrate deploy
+## 🗂 Estrutura do Projeto
 
-Boot up 2x docker containers: docker compose up
+```
+backend-todo-app/
+│
+├── public/
+│   └── index.html             # Frontend HTML para login e gerenciamento de tarefas
+│
+├── prisma/
+│   ├── schema.prisma          # Definição do schema do banco de dados
+│   └── migrations/            # Arquivos de migração do Prisma
+│
+├── src/
+│   ├── controllers/           # (Opcional) Lógica separada dos endpoints
+│   ├── middlewares/
+│   │   └── authMiddleware.js  # Middleware para verificação do token JWT
+│   ├── routes/
+│   │   ├── authRoutes.js      # Rotas de autenticação (registro e login)
+│   │   └── todoRoutes.js      # Rotas protegidas para gerenciamento de tarefas
+│   ├── prismaClient.js        # Configuração do cliente Prisma
+│   └── server.js              # Ponto de entrada principal da aplicação
+│
+├── .env                       # Variáveis de ambiente (DATABASE_URL, JWT_SECRET etc.)
+├── Dockerfile                 # Instruções para construir a imagem do app
+├── docker-compose.yaml        # Configuração do Docker Compose (app + PostgreSQL)
+├── package.json               # Dependências e scripts do projeto
+├── package-lock.json          # Versões travadas das dependências
+└── todo-app.rest              # Arquivo de requisições HTTP para testes
+```
 
-or
+---
 
+## ⚙️ Como Começar
+
+### 1. Instale o Docker Desktop  
+Disponível em [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+
+### 2. Clone o repositório:
+
+```bash
+git clone https://github.com/your-username/backend-todo-app.git
+cd backend-todo-app
+```
+
+### 3. Gere o cliente Prisma:
+
+```bash
+npx prisma generate
+```
+
+### 4. Construa as imagens Docker:
+
+```bash
+docker compose build
+```
+
+### 5. Crie e aplique as migrações:
+
+```bash
+docker compose run app npx prisma migrate dev --name init
+```
+
+Se necessário posteriormente:
+
+```bash
+docker compose run app npx prisma migrate deploy
+```
+
+### 6. Suba os containers:
+
+```bash
+docker compose up
+# ou em modo detached:
 docker compose up -d
+```
 
-If you want to boot it up without it commandeering your terminal (you'll have to stop if via Docker Desktop though).
+### 7. Acesse a aplicação:
 
-To login to docker PostgreSQL database (from a new terminal instance while docker containers are running) where you can run SQL commands and modify database!: docker exec -it postgres-db psql -U postgres -d todoapp
+Abra seu navegador em:  
+👉 `http://localhost:5003` (ou `localhost:3000`, dependendo da porta)
 
-To stop Docker containers: docker compose down
+---
 
-To delete all docker containers: docker system prune
+## 🛠 Comandos úteis
 
-Access the App: Open http://localhost:5003 (or localhost:3000 if changed) in your browser to see the frontend. You can register, log in, and manage your todo list from there.
+### Acessar o banco PostgreSQL:
 
-Emulating HTTP Requests (REST Client) The REST Client file (todo-app.rest) is provided to help you test the API using HTTP requests directly. You can run these requests using the REST Client extension for VS Code or other compatible tools.
+```bash
+docker exec -it postgres-db psql -U postgres -d todoapp
+```
 
-todo-app.rest The todo-app.rest file includes requests for:
+### Parar os containers:
 
-Registering a user: Sends a POST request to create a new user. Logging in: Sends a POST request to authenticate a user and retrieve a JWT token. Fetching todos: Sends a GET request to fetch the authenticated user's todos (JWT required). Adding a todo: Sends a POST request to create a new todo (JWT required). Updating a todo: Sends a PUT request to update an existing todo (JWT required). Deleting a todo: Sends a DELETE request to remove a todo (JWT required). How to Use the REST Client Install the REST Client extension for VS Code. Open todo-app.rest. Run the requests by clicking on the "Send Request" link above each block of HTTP code. Make sure to copy the token from the login response and replace {{token}} with the actual JWT token for protected routes. Conclusion This guide covers the main components of the app and how to get it up and running on your local machine. It highlights key considerations for Node.js version compatibility and provides a ready-to-use todo-app.rest file for testing. You can now explore the app's functionality, including authentication and CRUD operations on todos!
+```bash
+docker compose down
+```
+
+### Remover todos os containers/paradas:
+
+```bash
+docker system prune
+```
+
+---
+
+## 📬 Testando a API via REST Client
+
+O arquivo `todo-app.rest` contém requisições HTTP para testar a API diretamente no VS Code.
+
+### Como usar:
+
+1. Instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) no VS Code.
+2. Abra o arquivo `todo-app.rest`.
+3. Clique em **"Send Request"** acima de cada bloco para executar.
+4. Copie o token do login e substitua `{{token}}` pelas rotas protegidas.
+
+### Inclui requisições para:
+
+- ✅ Registro de usuário
+- 🔐 Login
+- 📥 Listagem de todos
+- ➕ Criação de tarefa
+- ✏️ Atualização de tarefa
+- ❌ Exclusão de tarefa
+
+---
+
+## ✅ Fluxo de Uso (Resumo)
+
+1. Modifique o `schema.prisma` se necessário  
+2. Gere as migrações com o Prisma  
+3. Rode o Docker Compose  
+4. Use o frontend ou REST Client para interagir com a API
+
+---
+
+## 📌 Conclusão
+
+Este projeto é um ótimo ponto de partida para aprender:
+
+- Backend com Node.js e Express.js  
+- Autenticação com JWT  
+- ORM com Prisma  
+- Banco de dados PostgreSQL  
+- Dockerização de apps backend
+
+Explore, modifique e aproveite para construir algo ainda maior!
